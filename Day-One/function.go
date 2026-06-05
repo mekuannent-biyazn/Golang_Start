@@ -56,6 +56,42 @@ func displayResult(name string, score float64) {
 	fmt.Printf("Passed: %t\n", passed)
 }
 
+// student record system using functions
+func addStudent(name string, age int) (string, int) {
+	var n int
+	fmt.Print("Enter number of students: ")
+	fmt.Scanln(&n)
+
+	for i:=0; i<=n; i++{
+		fmt.Print("Enter student name: ")
+		fmt.Scanln(&name)
+		fmt.Print("Enter student age: ")
+		fmt.Scanln(&age)
+	}
+
+	return name, age
+}
+
+func viewStudents(name string, age int) {
+	addStudent(name, age)
+	fmt.Printf("Student Name: %s, Age: %d\n", name, age)
+}
+
+func calcAvr(scores float64) float64 {
+	var n int
+	fmt.Print("Enter number of courses: ")
+	fmt.Scanln(&n)
+	Total := 0.0
+
+	for i:=0; i<=n; i++{
+		fmt.Print("Enter course score: ")
+		fmt.Scanln(&scores)
+		Total += scores
+	}
+	return Total / i
+}
+
+
 func main(){
 	fmt.Println("The sum of 5 and 3 is:", add(5,3))
 	sum, product := calc(9,5)
@@ -76,11 +112,19 @@ func main(){
 	// Student Result System
 	var name string
 	var score float64 
+	var age int
 
 	fmt.Print("Enter student name: ")
 	fmt.Scanln(&name)
 	fmt.Print("Enter student score: ")
 	fmt.Scanln(&score)
+	fmt.Print("Enter student age: ")
+	fmt.Scanln(&age)
 
 	displayResult(name, score)
+
+	viewStudents(name, age)
+
+	avr := calcAvr(score)
+	fmt.Printf("The average score is %.2f\n", avr)
 }
