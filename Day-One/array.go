@@ -122,4 +122,34 @@ func main() {
 		}
 	}
 	fmt.Println("The largest number is ", largest)
+
+	addstudent()
 }
+
+func addstudent() {
+	for i:=1; i<=5; i++{
+		var name string
+		fmt.Print("Enter new student Name: ")
+		fmt.Scanln(&name)
+
+		fmt.Println("The new student added is: ", name)
+		
+		var scors [5]int
+		for j:=0; j<len(scors); j++{
+			fmt.Printf("Enter score %d:", j+1)
+			fmt.Scanln(&scors[j])
+		}
+		fmt.Println("Scors of student ",name,"is: ",scors)
+		fmt.Println()
+		total:=0
+		var avg int
+
+		for a:=0; a<len(scors); a++{
+			total += scors[a]
+			avg=total/len(scors)
+		}
+		fmt.Println("Total Scors of student ",name,"is: ",total)
+		fmt.Println("Average Scors of student ",name,"is: ",avg)
+	}
+}
+
