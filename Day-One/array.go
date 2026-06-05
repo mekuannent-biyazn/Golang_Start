@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	// "slices"
+	"slices"
 )
 
 func main() {
@@ -85,4 +85,41 @@ func main() {
 	newValues[0]= 1994
 	fmt.Println(newValues)
 	fmt.Println(values)
+
+	// practicar exercise for array
+	arry5:= [5]int {1,2,3,4,5}
+	fmt.Println(arry5)
+
+	for i:=0; i<5; i++{
+		fmt.Println(arry5[i])
+	}
+
+	// printing student names with loop in array
+	studName:= [5]string {"Meku", "Abebe", "Kebede", "Alemu", "Zemenu"}
+	for i:=0; i<5; i++{
+		fmt.Println(studName[i])
+	}
+
+	// calculate students score
+	scores := [5]int{70,80,90,85,95}
+	sum:= 0
+	for i:=0; i<5; i++{
+		sum +=scores[i]
+	}
+	total:= sum
+	avg:= total/len(scores)
+
+	fmt.Println("Tatal score: ", total)
+	fmt.Println("Average score: ",avg)
+
+	// find the largest number
+	numbers := [5]int{100,30,15,80,25}
+	largest := numbers[0]
+
+	for i:=1; i<5; i++{
+		if numbers[i]>largest {
+			largest= numbers[i]
+		}
+	}
+	fmt.Println("The largest number is ", largest)
 }
