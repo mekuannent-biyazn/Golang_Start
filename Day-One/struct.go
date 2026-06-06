@@ -61,4 +61,67 @@ func main(){
 
 	// struct + function
 	displyStd(st1)
+
+	// Mini Projects
+	type StudentMinP struct {
+		Id int
+		name string
+		dpt string
+		GPA float64
+	}
+
+	// create 3 students
+	Mpstud1:= StudentMinP{
+		Id: 1,
+		name: "Mekuannent",
+		dpt: "CS",
+		GPA: 3.71,
+	}
+	
+	Mpstud2:= StudentMinP{
+		Id: 2,
+		name: "Maritu",
+		dpt: "IT",
+		GPA: 3.8,
+	}
+
+	Mpstud3:= StudentMinP{
+		Id: 3,
+		name: "Tiruya",
+		dpt: "Accounting",
+		GPA: 3.7,
+	}
+
+	fmt.Println("Student 1 info: \nId: \t",Mpstud1.Id,"\nName: \t",Mpstud1.name,"\nDepartment: \t",Mpstud1.dpt,"\nCGPA: \t",Mpstud1.GPA)
+	fmt.Println("\n\nStudent 2 info: \nId: \t",Mpstud2.Id,"\nName: \t",Mpstud2.name,"\nDepartment: \t",Mpstud2.dpt,"\nCGPA: \t",Mpstud2.GPA)
+	fmt.Println("\n\nStudent 3 info: \nId: \t",Mpstud3.Id,"\nName: \t",Mpstud3.name,"\nDepartment: \t",Mpstud3.dpt,"\nCGPA: \t",Mpstud3.GPA)
+		
+	// store students in slice
+	SStudents:= []StudentMinP{
+		{
+			Id: 1,
+			name: "Mekuannent",
+			dpt: "CS",
+			GPA: 3.71,
+		},
+		{
+			Id: 2,
+			name: "Maritu",
+			dpt: "IT",
+			GPA: 3.8,
+		},
+		{
+			Id: 3,
+			name: "Tiruya",
+			dpt: "Accounting",
+			GPA: 3.7,
+		},
+	}
+	for _, students:= range SStudents{
+		fmt.Println("\n==================================")
+		fmt.Println("Id: ", students.Id)
+		fmt.Println("Name: ", students.name)
+		fmt.Println("Department: ", students.dpt)
+		fmt.Println("GPA: ", students.GPA)
+	}
 }
