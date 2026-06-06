@@ -5,6 +5,11 @@ import "fmt"
 type User struct{
 	Name string
 	Age int
+	Email string
+}
+
+func (u User) IsAdmin() bool{
+	return u.Email == "Admin@gmail.com"
 }
 
 type Techer struct{
@@ -57,6 +62,7 @@ func main(){
 	user:= User{
 		Name: "MEKUANNENT",
 		Age: 25,
+		Email: "Admins@gmail.com",
 	}
 
 	teacher:= Techer{
@@ -83,4 +89,12 @@ func main(){
 	fmt.Println("===========Area of Rectangle============")
 	Area:= rectangle.area()
 	fmt.Println(Area)
+	fmt.Println("===========Is Admin============")
+	admin:= user.IsAdmin()
+	fmt.Println(admin)
+	if user.IsAdmin() {
+		fmt.Println("Allow admin access")
+	} else{
+		fmt.Println("Unauthorized access!!")
+	}
 }
