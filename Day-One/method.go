@@ -57,6 +57,37 @@ func (t Techer) show(){
 		fmt.Println("Age: ",u.Age)
 	}
 
+	// =============================================
+
+	type bankAccount struct{
+		owner string
+		Balance float64
+	}
+
+	func (ba *bankAccount) deposit( amount float64 ) {
+		fmt.Println("===========Deposite==========")
+		ba.Balance += amount 
+		fmt.Println("Owner: ", ba.owner,"")
+		fmt.Println("Balance : ", ba.Balance)
+		fmt.Println("Diposite: ", amount)
+		fmt.Println("Balance : ", ba.Balance)
+	} 
+
+	func (ba *bankAccount) Withdraw(amount float64){
+		fmt.Println("===========Withdrwal==========")
+		ba.Balance -= amount 
+		fmt.Println("Owner: ", ba.owner,"")
+		fmt.Println("Balance : ", ba.Balance)
+		fmt.Println("Withdrwal: ", amount)
+		fmt.Println("Balance : ", ba.Balance)
+	}
+
+	func (ba bankAccount) disply(){
+		fmt.Println("=============Disply the result================")
+		fmt.Println("Owner : ",ba.owner)
+		fmt.Println("Balance: ",ba.Balance)
+	}
+
 func main(){
 	greet()
 	user:= User{
@@ -97,4 +128,12 @@ func main(){
 	} else{
 		fmt.Println("Unauthorized access!!")
 	}
+
+	baAct:= bankAccount{
+		owner: "Mekuannent",
+		Balance: 3000,
+	}
+	baAct.disply()
+	baAct.deposit(1000.0)
+	baAct.Withdraw(500.0)
 }
