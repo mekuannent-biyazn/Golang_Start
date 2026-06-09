@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"io"
+	"bufio"
 )
 
 func devide(a,b float64) (float64, error){
@@ -67,8 +68,13 @@ func main(){
 		fmt.Println("Error: ", err)
 		return
 	}
-	os.Readfile(file)
 	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
 
 	fmt.Println("File is opend success fully!!", file)
 
