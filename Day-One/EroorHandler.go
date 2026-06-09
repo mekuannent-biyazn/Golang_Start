@@ -22,7 +22,38 @@ func validateAge(Age int) error{
 	return nil
 }
 
+// mini project for login error handling
+func login(username, password string) error{
+	if username == ""{
+		return errors.New("User Name is required!")
+	}
+	if password == "" {
+		return errors.New("Password is required!")
+	}
+	if username!= "admin" || password != "abc123"{
+		return errors.New("Invalid credintials!!")
+	}
+	return  nil
+}
+
+var invalidPassword = errors.New("Invalid Password!")
+func checkPassword(password string) error{
+	if password != "1234"{
+		return fmt.Errorf("Password Error: %w",invalidPassword)
+	}
+	return nil
+}
+
 func main(){
+	err:= checkPassword("1122")
+	if err != nil{
+		fmt.Println("Wrong Password")
+	}
+
+	if errors.Is(err, invalidPassword){
+		fmt.Println("Wrong Password in errors.Is.")
+	}
+
 	result, error:= devide(10, 2)
 	if error != nil{
 		fmt.Println("Error: ", error)
@@ -36,6 +67,10 @@ func main(){
 		fmt.Println("Error: ", err)
 		return
 	}
+	os.Readfile(file)
+	defer file.Close()
+
+	fmt.Println("File is opend success fully!!", file)
 
 	content, errc:= io.ReadAll(file)
 	if errc!= nil {
@@ -44,10 +79,6 @@ func main(){
 	}
 	fmt.Println("File Content: ", content)
 
-	defer file.Close()
-
-	fmt.Println("File is opend success fully!!", file)
-
 	// Custom Errors 
 	erro:= validateAge(18)
 	if erro!= nil {
@@ -55,5 +86,12 @@ func main(){
 		return
 	} else {
 		fmt.Println("You are matured!!")
+	}
+
+	errl:=login("admin","abc123")
+	if errl!= nil {
+		fmt.Println("Login Error: ", errl)
+	} else {
+		fmt.Println("LogIn success full!!")
 	}
 }
