@@ -69,8 +69,29 @@ func fruitList(ch chan string){
 	}
 }
 
+var(
+	count int
+	mu sync.Mutex
+)
+
+func increment( wg *sync.WaitGroup){
+	defer wg.Done()
+	mu.Lock()
+	count++
+	mu.Unlock()
+}
+
 func main(){
 	var wg sync.WaitGroup
+
+	for i:=0; i<1000; i++{
+		wg.Add(1)
+		go func(){
+			increment(&wg)
+		}()
+	}
+	wg.Wait()
+	fmt.Println("Total count: ", count)
 
 	sch1:=make(chan string)
 	sch2:=make(chan string)
