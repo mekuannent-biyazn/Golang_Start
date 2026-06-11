@@ -56,8 +56,61 @@ func Produce(ch chan int){
 	close(ch)
 }
 
+func worker(id int, jobs chan int){
+	for job:= range jobs{
+		fmt.Printf("Worker %d Processes %d\n", id, job)
+		time.Sleep(time.Second)
+	}
+}
+
+func fruitList(ch chan string){
+	for frt:= range ch{
+		fmt.Printf("This is %s\n",frt)
+	}
+}
+
 func main(){
 	var wg sync.WaitGroup
+
+	sch1:=make(chan string)
+	sch2:=make(chan string)
+
+	go func(){
+		sch1<-"This is the selection message 1!"
+		time.Sleep(1*time.Second)
+	}()
+
+	go func(){
+		sch2<-"This is the selection message 2"
+		time.Sleep(2*time.Second)
+	}()
+
+	select{
+	case msg1:=<-sch1:
+		fmt.Println(msg1)
+	case msg2:=<-sch2:
+		fmt.Println(msg2)
+	case <-time.After(3*time.Second):
+		fmt.Println("Time Out!")
+	}
+
+	fruit:=make(chan string, 5 )
+	go fruitList(fruit)
+
+	fruit<-"Orange"
+	fruit<-"Banana"
+	close(fruit)
+
+	jobs:=make(chan int, 5)
+	go worker(1, jobs)
+	go worker(2, jobs)
+
+	for i:=1; i<=5; i++{
+		jobs<-i
+	}
+	close(jobs)
+
+	time.Sleep(5*time.Second)
 
 	prd:=make(chan int, 5)
 	go Produce(prd)
