@@ -16,6 +16,20 @@ func Register(
 	r *http.Request,
 ){
 	var user models.User
+	type UserResponse struct{
+		Id int `json: "id"`
+		Name string `json: "name"`
+		Email string `json: "email"`
+	}
+
+	if r.Method!= http.MethodPost{
+		http.Error(
+			w,
+			"Method not allowed!",
+			http.StatusMethodNotAllowed,
+		)
+		return
+	}
 
 	err:= json.NewDecoder(
 		r.Body,
@@ -39,6 +53,17 @@ func Register(
 		return
 	}
 
+	for _,u:= range users{
+		if u.Email== user.Email{
+			http.Error(
+				w,
+				"Email is already exist!",
+				http.StatusBadRequest,
+			)
+			return
+		}
+	}
+
 	hashPassword, err:= utils.HashPassword(
 		user.Password,
 	)
@@ -59,7 +84,13 @@ func Register(
 	w.WriteHeader(
 		http.StatusCreated,
 	)
-	json.NewEncoder(w).Encode(&user)
+
+	response:= UserResponse{
+		Id: user.Id,
+		Name: user.Name,
+		Email: user.Email,
+	}
+	json.NewEncoder(w).Encode(&response)
 }
 
 func Login(
@@ -69,6 +100,15 @@ func Login(
 	var loginData struct{
 		Email string `json: "email"`
 		Password string `json: "password"`
+	}
+
+	if r.Method!= http.MethodPost{
+		http.Error(
+			w,
+			"Method not allowed!",
+			http.StatusMethodNotAllowed,
+		)
+		return
 	}
 
 	json.NewDecoder(
