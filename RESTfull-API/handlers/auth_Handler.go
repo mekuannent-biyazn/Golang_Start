@@ -4,6 +4,8 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"fmt"
+	"strconv"
 
 	"go-auth-api/models"
 	"go-auth-api/utils"
@@ -17,9 +19,9 @@ func Register(
 ){
 	var user models.User
 	type UserResponse struct{
-		Id int `json: "id"`
-		Name string `json: "name"`
-		Email string `json: "email"`
+		Id int `json:"id"`
+		Name string `json:"name"`
+		Email string `json:"email"`
 	}
 
 	if r.Method!= http.MethodPost{
@@ -98,8 +100,8 @@ func Login(
 	r *http.Request,
 ){
 	var loginData struct{
-		Email string `json: "email"`
-		Password string `json: "password"`
+		Email string `json:"email"`
+		Password string `json:"password"`
 	}
 
 	if r.Method!= http.MethodPost{
@@ -165,7 +167,151 @@ func Login(
 
 	json.NewEncoder(w).Encode(
 		map[string]string{
-			"token: ": token,
+			"token": token,
 		},
 	)
+}
+
+func Profile(
+	w http.ResponseWriter,
+	r *http.Request,
+){
+	userID:= r.Context().Value("userID")
+
+	fmt.Println("Profile UserID:", userID)
+
+	json.NewEncoder(w).
+		Encode(
+			map[string]interface{}{
+				"message":
+					"Welcome",
+				"user_id":
+					userID,
+			},
+		)
+}
+
+func UpdateProfile(
+	w http.ResponseWriter,
+	r *http.Request,
+){
+	var user models.User
+	var updateData struct{
+		Name string`json:"name"`
+		Email string`json:"email"`
+		Password string`json:"passsword"`
+	}
+
+	if r.Method!= http.MethodPut{
+		http.Error(
+			w,
+			"Method not allowed!!",
+			http.StatusMethodNotAllowed,
+		)
+		return
+	}
+
+	json.NewDecoder(
+		r.Body,
+	).Decode(&updateData)
+
+	user.Name = updateData.Name
+	user.Email = updateData.Email
+
+	hash, err := utils.HashPassword(
+		updateData.Password,
+	)
+
+	if err!= nil{
+		http.Error(
+			w,
+			"Password Error!",
+			http.StatusInternalServerError,
+		)
+	}
+	user.Password = hash
+
+	users= append(users, user)
+
+	json.NewEncoder(w).Encode(
+		map[string]interface{}{
+				"message":
+					"Your Profile data is changed successfully!!",
+				"New Name":
+					user.Name,
+			},
+	)
+}
+
+func DeleteUser(
+	w http.ResponseWriter,
+	r *http.Request,
+){
+	ID:= r.URL.Query().Get("id")
+
+	if r.Method!= http.MethodDelete{
+		http.Error(
+			w,
+			"Mothod not allowed!",
+			http.StatusMethodNotAllowed,
+		)
+		return
+	}
+
+	if ID== ""{
+		http.Error(
+			w,
+			"User Id is requered.",
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	userId, err := strconv.Atoi(ID)
+
+	if err != nil {
+		http.Error(
+			w,
+			"Invalid ID",
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	userIndex:= -1
+
+	for i, user := range users{
+		if user.Id == userId{
+			userIndex = i
+			break
+		}
+	}
+
+	if userIndex == -1{
+		http.Error(
+			w,
+			"User Not Found!",
+			http.StatusNotFound,
+		)
+		return
+	}
+
+	users = append(
+		users[:userIndex],
+		users[userIndex+1:]...,
+	)
+
+	json.NewEncoder(w).Encode(
+		map[string]string{
+			"message": "User Deleted Successfully",
+		},
+	)
+
+}
+
+func GetAllUsers(
+	w http.ResponseWriter,
+	r *http.Request,
+){
+	json.NewEncoder(w).Encode(&users)
 }
